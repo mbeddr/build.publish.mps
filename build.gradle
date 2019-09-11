@@ -70,11 +70,22 @@ task packageMpsOpenApiSources(type: Jar, dependsOn: unzipMPS) {
 
 task packageMpsTool(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-tool'
-    from zipTree("$mpsUnpackedDir/lib/mps-tool.jar")
+    from zipTree("$mpsUnpackedDir/lib/mpsant/mps-tool.jar")
 }
 
 task packageMpsToolSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-tool'
+    classifier 'sources'
+    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
+}
+
+task packageMpsRun(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-run'
+    from zipTree("$mpsUnpackedDir/lib/mpsant/mps-run.jar")
+}
+
+task packageMpsRunSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-run'
     classifier 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
@@ -150,6 +161,13 @@ publishing {
             version mpsBuild
             artifact packageMpsTool
             artifact packageMpsToolSources
+        }
+        mpsRun(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-run'
+            version mpsBuild
+            artifact packageMpsRun
+            artifact packageMpsRunSources
         }
         mpsEnvironment(MavenPublication) {
             groupId 'com.jetbrains'
