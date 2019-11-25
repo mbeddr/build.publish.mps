@@ -1,4 +1,7 @@
 .gradle
+.vscode
+/.project
+/.settings
 /build/
 
 # Ignore Gradle GUI config
