@@ -112,6 +112,17 @@ task packageMpsPlatformSources(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
+task packageUtil(type: Jar, dependsOn: unzipMPS) {
+    baseName 'util'
+    from zipTree("$mpsUnpackedDir/lib/util.jar")
+}
+
+task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'util'
+    classifier 'sources'
+    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
+}
+
 task packageJdom(type: Jar, dependsOn: unzipMPS) {
     baseName 'jdom'
     from zipTree("$mpsUnpackedDir/lib/jdom.jar")
@@ -182,6 +193,13 @@ publishing {
             version mpsBuild
             artifact packageMpsPlatform
             artifact packageMpsPlatformSources
+        }
+        mpsUtil(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'util'
+            version mpsBuild
+            artifact packageUtil
+            artifact packageUtilSources
         }
         jdom(MavenPublication) {
             groupId 'com.jetbrains'
