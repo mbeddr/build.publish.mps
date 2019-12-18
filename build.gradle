@@ -41,7 +41,7 @@ task publishMPS(type: Zip, dependsOn: unzipMPS) {
 }
 
 /*
- * Repackage frequently needed JAR libraries shipping with MPS (in the lib folder) as individually consumable artifacts.
+ * Repackage frequently needed JAR libraries shipping with MPS (in the lib and plugins folders) as individually consumable artifacts.
  * This is useful for the development of command line utilities, Maven plugins, Gradle plugins, or other things
  * that require only smaller parts of the MPS runtime and don't want to end up with a full MPS in their dependencies.
  */
@@ -123,6 +123,17 @@ task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
+task packageMpsConsoleIdeCommandsRuntime(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-console-ide-commands-runtime'
+    from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime.jar")
+}
+
+task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-console-ide-commands-runtime'
+    classifier 'sources'
+    from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
+}
+
 task packageJdom(type: Jar, dependsOn: unzipMPS) {
     baseName 'jdom'
     from zipTree("$mpsUnpackedDir/lib/jdom.jar")
@@ -194,12 +205,19 @@ publishing {
             artifact packageMpsPlatform
             artifact packageMpsPlatformSources
         }
-        mpsUtil(MavenPublication) {
+        util(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'util'
             version mpsBuild
             artifact packageUtil
             artifact packageUtilSources
+        }
+        mpsConsoleIdeCommandsRuntime(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-console-ide-commands-runtime'
+            version mpsBuild
+            artifact packageMpsConsoleIdeCommandsRuntime
+            artifact packageMpsConsoleIdeCommandsRuntimeSources
         }
         jdom(MavenPublication) {
             groupId 'com.jetbrains'
