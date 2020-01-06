@@ -65,7 +65,9 @@ task packageMpsOpenApi(type: Jar, dependsOn: unzipMPS) {
 task packageMpsOpenApiSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-openapi'
     classifier 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'org/jetbrains/mps/**'
+    }
 }
 
 task packageMpsTool(type: Jar, dependsOn: unzipMPS) {
@@ -76,7 +78,9 @@ task packageMpsTool(type: Jar, dependsOn: unzipMPS) {
 task packageMpsToolSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-tool'
     classifier 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/tool/builder/**'
+    }
 }
 
 task packageMpsRun(type: Jar, dependsOn: unzipMPS) {
@@ -84,11 +88,14 @@ task packageMpsRun(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/mpsant/mps-run.jar")
 }
 
+// MPS-src.zip doesn't contain sources for mps-run.jar
+/*
 task packageMpsRunSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-run'
     classifier 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
+ */
 
 task packageMpsEnvironment(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-environment'
@@ -98,7 +105,11 @@ task packageMpsEnvironment(type: Jar, dependsOn: unzipMPS) {
 task packageMpsEnvironmentSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-environment'
     classifier 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/tool/common/**'
+        include 'jetbrains/mps/tool/environment/**'
+        include 'jetbrains/mps/core/tool/environment/**'
+    }
 }
 
 task packageMpsPlatform(type: Jar, dependsOn: unzipMPS) {
@@ -132,6 +143,70 @@ task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) 
     baseName 'mps-console-ide-commands-runtime'
     classifier 'sources'
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
+}
+
+task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-messaging'
+    from zipTree("$mpsUnpackedDir/lib/mps-messaging.jar")
+}
+
+task packageMpsMessagingSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-messaging'
+    classifier 'sources'
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/messages/**'
+    }
+}
+
+task packageMpsModelchecker(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-modelchecker'
+    from zipTree("$mpsUnpackedDir/plugins/mps-modelchecker/lib/modelchecker.jar")
+}
+
+task packageMpsModelcheckerSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-modelchecker'
+    classifier 'sources'
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/ide/modelchecker/**'
+    }
+}
+
+task packageMpsHttpsupportRuntime(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-httpsupport-runtime'
+    from zipTree("$mpsUnpackedDir/plugins/mps-httpsupport/solutions/jetbrains.mps.ide.httpsupport.runtime.jar")
+}
+
+task packageMpsHttpsupportRuntimeSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-httpsupport-runtime'
+    classifier 'sources'
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/ide/httpsupport/runtime/**'
+    }
+}
+
+task packageMpsProjectCheck(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-project-check'
+    from zipTree("$mpsUnpackedDir/lib/mps-project-check.jar")
+}
+
+task packageMpsProjectCheckSources(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-project-check'
+    classifier 'sources'
+    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+        include 'jetbrains/mps/checkers/**'
+        include 'jetbrains/mps/core/platform/MPSProjectValidation.java'
+        include 'jetbrains/mps/project/validation/**'
+    }
+}
+
+task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
+    baseName 'platform-api'
+    from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
+}
+
+task packagePlatformConcurrency(type: Jar, dependsOn: unzipMPS) {
+    baseName 'platform-concurrency'
+    from zipTree("$mpsUnpackedDir/lib/platform-concurrency.jar")
 }
 
 task packageJdom(type: Jar, dependsOn: unzipMPS) {
@@ -189,7 +264,7 @@ publishing {
             artifactId 'mps-run'
             version mpsBuild
             artifact packageMpsRun
-            artifact packageMpsRunSources
+            //artifact packageMpsRunSources
         }
         mpsEnvironment(MavenPublication) {
             groupId 'com.jetbrains'
@@ -218,6 +293,46 @@ publishing {
             version mpsBuild
             artifact packageMpsConsoleIdeCommandsRuntime
             artifact packageMpsConsoleIdeCommandsRuntimeSources
+        }
+        mpsMessaging(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-messaging'
+            version mpsBuild
+            artifact packageMpsMessaging
+            artifact packageMpsMessagingSources
+        }
+        mpsModelchecker(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-modelchecker'
+            version mpsBuild
+            artifact packageMpsModelchecker
+            artifact packageMpsModelcheckerSources
+        }
+        mpsHttpsupportRuntime(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-httpsupport-runtime'
+            version mpsBuild
+            artifact packageMpsHttpsupportRuntime
+            artifact packageMpsHttpsupportRuntimeSources
+        }
+        mpsProjectCheck(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-project-check'
+            version mpsBuild
+            artifact packageMpsProjectCheck
+            artifact packageMpsProjectCheckSources
+        }
+        platformApi(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'platform-api'
+            version mpsBuild
+            artifact packagePlatformApi
+        }
+        platformConcurrency(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'platform-concurrency'
+            version mpsBuild
+            artifact packagePlatformConcurrency
         }
         jdom(MavenPublication) {
             groupId 'com.jetbrains'
