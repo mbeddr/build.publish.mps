@@ -57,6 +57,21 @@ task packageMpsCoreSources(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
+task packageMpsEditor(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-editor'
+    from zipTree("$mpsUnpackedDir/lib/mps-editor.jar")
+}
+
+task packageMpsEditorApi(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-editor-api'
+    from zipTree("$mpsUnpackedDir/lib/mps-editor-api.jar")
+}
+
+task packageMpsEditorRuntime(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-editor-runtime'
+    from zipTree("$mpsUnpackedDir/lib/mps-editor-runtime.jar")
+}
+
 task packageMpsOpenApi(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-openapi'
     from zipTree("$mpsUnpackedDir/lib/mps-openapi.jar")
@@ -244,6 +259,24 @@ publishing {
             version mpsBuild
             artifact packageMpsCore
             artifact packageMpsCoreSources
+        }
+        mpsEditor(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-editor'
+            version mpsBuild
+            artifact packageMpsEditor
+        }
+        mpsEditorApi(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-editor-api'
+            version mpsBuild
+            artifact packageMpsEditorApi
+        }
+        mpsEditorRuntime(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-editor-runtime'
+            version mpsBuild
+            artifact packageMpsEditorRuntime
         }
         mpsOpenApi(MavenPublication) {
             groupId 'com.jetbrains'
