@@ -149,6 +149,11 @@ task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
+task packageExtensions(type: Jar, dependsOn: unzipMPS) {
+    baseName 'extensions'
+    from zipTree("$mpsUnpackedDir/lib/extensions.jar")
+}
+
 task packageMpsConsoleIdeCommandsRuntime(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-console-ide-commands-runtime'
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime.jar")
@@ -319,6 +324,12 @@ publishing {
             version mpsBuild
             artifact packageUtil
             artifact packageUtilSources
+        }
+        extensions(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'extensions'
+            version mpsBuild
+            artifact packageExtensions
         }
         mpsConsoleIdeCommandsRuntime(MavenPublication) {
             groupId 'com.jetbrains'
