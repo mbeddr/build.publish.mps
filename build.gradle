@@ -6,12 +6,12 @@ plugins {
 
 import de.undercouch.gradle.tasks.download.Download
 
-ext.mpsMajor = '2020.1'
-ext.mpsBuild = '2020.1.4'
+ext.mpsMajor = '2020.2'
+ext.mpsBuild = '2020.2'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
-def eapSuffix = (mpsBuild.contains("EAP")||mpsBuild.contains("Beta")||mpsBuild.contains("RC")) ? " EAP" : ""
+def eapSuffix = (mpsBuild.contains("EAP")) ? " EAP" : ""
 def mpsUnpackedDir = new File(mpsDownloadDir, "MPS ${mpsMajor}${eapSuffix}")
 
 // Downloads MPS from jetbrains.com into ${mpsDownloadFile}
