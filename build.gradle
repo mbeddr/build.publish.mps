@@ -7,7 +7,7 @@ plugins {
 import de.undercouch.gradle.tasks.download.Download
 
 ext.mpsMajor = '2020.3'
-ext.mpsBuild = '2020.3-EAP2'
+ext.mpsBuild = '2020.3-EAP3'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
