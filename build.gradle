@@ -51,6 +51,11 @@ task packageMpsCore(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/mps-core.jar")
 }
 
+task packageMpsWorkbench(type: Jar, dependsOn: unzipMPS) {
+    baseName 'mps-workbench'
+    from zipTree("$mpsUnpackedDir/lib/mps-workbench.jar")
+}
+
 task packageMpsCoreSources(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-core'
     classifier 'sources'
@@ -377,6 +382,12 @@ publishing {
             artifactId 'platform-concurrency'
             version mpsBuild
             artifact packagePlatformConcurrency
+        }
+        mpsWorkbench(MavenPublication) {
+            groupId 'com.jetbrains'
+            artifactId 'mps-workbench'
+            version mpsBuild
+            artifact packageMpsWorkbench
         }
         jdom(MavenPublication) {
             groupId 'com.jetbrains'
