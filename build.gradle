@@ -6,8 +6,8 @@ plugins {
 
 import de.undercouch.gradle.tasks.download.Download
 
-ext.mpsMajor = '2020.3'
-ext.mpsBuild = '2020.3.3'
+ext.mpsMajor = '2021.1'
+ext.mpsBuild = '2021.1-EAP5'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
@@ -154,10 +154,10 @@ task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
-task packageExtensions(type: Jar, dependsOn: unzipMPS) {
+/*task packageExtensions(type: Jar, dependsOn: unzipMPS) {
     baseName 'extensions'
     from zipTree("$mpsUnpackedDir/lib/extensions.jar")
-}
+}*/
 
 task packageMpsConsoleIdeCommandsRuntime(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-console-ide-commands-runtime'
@@ -330,12 +330,12 @@ publishing {
             artifact packageUtil
             artifact packageUtilSources
         }
-        extensions(MavenPublication) {
+        /*extensions(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'extensions'
             version mpsBuild
             artifact packageExtensions
-        }
+        }*/
         mpsConsoleIdeCommandsRuntime(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-console-ide-commands-runtime'
