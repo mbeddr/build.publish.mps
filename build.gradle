@@ -7,7 +7,7 @@ plugins {
 import de.undercouch.gradle.tasks.download.Download
 
 ext.mpsMajor = '2021.1'
-ext.mpsBuild = '2021.1-EAP5'
+ext.mpsBuild = '2021.1'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
@@ -229,11 +229,6 @@ task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
 }
 
-task packagePlatformConcurrency(type: Jar, dependsOn: unzipMPS) {
-    baseName 'platform-concurrency'
-    from zipTree("$mpsUnpackedDir/lib/platform-concurrency.jar")
-}
-
 task packageJdom(type: Jar, dependsOn: unzipMPS) {
     baseName 'jdom'
     from zipTree("$mpsUnpackedDir/lib/jdom.jar")
@@ -376,12 +371,6 @@ publishing {
             artifactId 'platform-api'
             version mpsBuild
             artifact packagePlatformApi
-        }
-        platformConcurrency(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'platform-concurrency'
-            version mpsBuild
-            artifact packagePlatformConcurrency
         }
         mpsWorkbench(MavenPublication) {
             groupId 'com.jetbrains'
