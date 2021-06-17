@@ -255,6 +255,17 @@ publishing {
             }
             url project.findProperty('repository') ?: 'https://projects.itemis.de/nexus/content/repositories/mbeddr'
         }
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/mbeddr/build.publish.mps")
+            if (project.hasProperty("gpr.token")) {
+                credentials {
+                    username = project.findProperty("gpr.user")
+                    password = project.findProperty("gpr.token")
+                }
+            }
+        }
     }
     publications {
         mps(MavenPublication) {
