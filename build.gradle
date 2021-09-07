@@ -6,8 +6,8 @@ plugins {
 
 import de.undercouch.gradle.tasks.download.Download
 
-ext.mpsMajor = '2021.1'
-ext.mpsBuild = '2021.1.1'
+ext.mpsMajor = '2021.2'
+ext.mpsBuild = '2021.2-EAP1'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
@@ -229,10 +229,12 @@ task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
 }
 
+/*
 task packageJdom(type: Jar, dependsOn: unzipMPS) {
     baseName 'jdom'
     from zipTree("$mpsUnpackedDir/lib/jdom.jar")
 }
+*/
 
 task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
     baseName 'annotations'
@@ -390,12 +392,12 @@ publishing {
             version mpsBuild
             artifact packageMpsWorkbench
         }
-        jdom(MavenPublication) {
+        /*jdom(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'jdom'
             version mpsBuild
             artifact packageJdom
-        }
+        }*/
         annotations(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'annotations'
