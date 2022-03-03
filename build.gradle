@@ -229,10 +229,6 @@ task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
 }
 
-task packageJdom(type: Jar, dependsOn: unzipMPS) {
-    baseName 'jdom'
-    from zipTree("$mpsUnpackedDir/lib/jdom.jar")
-}
 
 task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
     baseName 'annotations'
@@ -389,12 +385,6 @@ publishing {
             artifactId 'mps-workbench'
             version mpsBuild
             artifact packageMpsWorkbench
-        }
-        jdom(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'jdom'
-            version mpsBuild
-            artifact packageJdom
         }
         annotations(MavenPublication) {
             groupId 'com.jetbrains'
