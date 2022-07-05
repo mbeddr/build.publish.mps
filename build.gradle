@@ -240,7 +240,7 @@ publishing {
         if (project.hasProperty('nexusUsername')) {
             maven {
                 name = "oldItemisNexus"
-                url project.publishingRepository
+                url project.findProperty('repository') ?: 'https://projects.itemis.de/nexus/content/repositories/mbeddr'
                 credentials {
                     username project.nexusUsername
                     password project.nexusPassword
