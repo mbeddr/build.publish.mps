@@ -236,25 +236,36 @@ task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
 }
 
 publishing {
-    repositories {
-        maven {
-            if (project.hasProperty('nexusUsername')) {
+        repositories {
+        if (project.hasProperty('nexusUsername')) {
+            maven {
+                name = "oldItemisNexus"
+                url project.publishingRepository
                 credentials {
-                    username project.getProperty('nexusUsername')
-                    password project.getProperty('nexusPassword')
+                    username project.nexusUsername
+                    password project.nexusPassword
                 }
             }
-            url project.findProperty('repository') ?: 'https://projects.itemis.de/nexus/content/repositories/mbeddr'
         }
-        repositories {
+        if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
+            maven {
+                name = "itemisCloud"
+                url = project.version.contains("SNAPSHOT")
+                        ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
+                        : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                credentials {
+                    username = project.findProperty("artifacts.itemis.cloud.user")
+                    password = project.findProperty("artifacts.itemis.cloud.pw")
+                }
+            }
+        }
+        if (project.hasProperty("gpr.token")) {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/mbeddr/build.publish.mps")
-                if(project.hasProperty("gpr.token")) {
-                    credentials {
-                        username = project.findProperty("gpr.user")
-                        password = project.findProperty("gpr.token")
-                    }
+                url = "https://maven.pkg.github.com/mbeddr/build.publish.mps"
+                credentials {
+                    username = project.findProperty("gpr.user")
+                    password = project.findProperty("gpr.token")
                 }
             }
         }
