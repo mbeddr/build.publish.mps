@@ -37,3 +37,5 @@ The following artifacts are published:
 - *com.jetbrains.mps-workbench*
 - *com.jetbrains.annotations*
 
+**Note**: Since 2021.1, the artifact *com.jetbrains.platform-concurrency* is no longer available.
+
