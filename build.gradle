@@ -7,7 +7,7 @@ plugins {
 import de.undercouch.gradle.tasks.download.Download
 
 ext.mpsMajor = '2020.3'
-ext.mpsBuild = '2020.3.6'
+ext.mpsBuild = '2020.3.4'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
@@ -246,18 +246,8 @@ task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
 
 publishing {
     repositories {
-        maven {
-            if (project.hasProperty('nexusUsername')) {
-                credentials {
-                    username project.getProperty('nexusUsername')
-                    password project.getProperty('nexusPassword')
-                }
-            }
-            url project.findProperty('repository') ?: 'https://projects.itemis.de/nexus/content/repositories/mbeddr'
-        }
         repositories {
             maven {
-                name = "itemisCloud"
                 url = project.version.contains("SNAPSHOT")
                         ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
                         : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
