@@ -224,10 +224,12 @@ task packageMpsProjectCheckSources(type: Jar, dependsOn: unzipMPS) {
     }
 }
 
+/*
 task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
     baseName 'platform-api'
     from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
 }
+ */
 
 
 task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
@@ -386,12 +388,14 @@ publishing {
             artifact packageMpsProjectCheck
             artifact packageMpsProjectCheckSources
         }
+        /*
         platformApi(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'platform-api'
             version mpsBuild
             artifact packagePlatformApi
         }
+         */
         mpsWorkbench(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-workbench'

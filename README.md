@@ -33,9 +33,10 @@ The following artifacts are published:
 - *com.jetbrains.mps-modelchecker*
 - *com.jetbrains.mps-httpsupport-runtime*
 - *com.jetbrains.mps-project-check*
-- *com.jetbrains.platform-api*
 - *com.jetbrains.mps-workbench*
 - *com.jetbrains.annotations*
 
-**Note**: Since 2021.1, the artifact *com.jetbrains.platform-concurrency* is no longer available.
+**Notes**:
+- Since 2021.1, the artifact *com.jetbrains.platform-concurrency* is no longer available.
+- Since 2022.2, the artifact *com.jetbrains.platform-api* is no longer available.
 
