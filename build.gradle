@@ -6,8 +6,8 @@ plugins {
 
 import de.undercouch.gradle.tasks.download.Download
 
-ext.mpsMajor = '2022.2'
-ext.mpsBuild = '2022.2'
+ext.mpsMajor = '2022.3'
+ext.mpsBuild = '2022.3'
 
 def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
 def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
@@ -35,7 +35,6 @@ task unzipMPS(dependsOn: downloadMPS) {
     }
 }
 
-// Repackages MPS so that the resulting zip contains the contents of 'MPS 3.<x>' directory of the original MPS zip
 task publishMPS(type: Zip, dependsOn: unzipMPS) {
     from mpsUnpackedDir
 }
