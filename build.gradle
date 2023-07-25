@@ -14,6 +14,15 @@ def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
 def eapSuffix = (mpsBuild.contains("EAP")) ? " EAP" : ""
 def mpsUnpackedDir = new File(mpsDownloadDir, "MPS ${mpsMajor}${eapSuffix}")
 
+task testPackaging{
+    description "Task triggering all packaging tasks"
+}
+
+testPackaging.dependsOn {
+    tasks.withType(Jar).findAll {jarTask -> jarTask.name.startsWith('package')}
+}
+
+
 // Downloads MPS from jetbrains.com into ${mpsDownloadFile}
 task downloadMPS(type: Download) {
     doFirst {
