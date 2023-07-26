@@ -3,17 +3,23 @@
 
 name: Java CI with Gradle
 
-on:
-  push:
-    branches:
-      # Only on push events on master and mps branches
-      - master
-      - mps/*
+on: [push]
 jobs:
-  build:
-
+  test-packaging:
     runs-on: ubuntu-latest
-
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Test packaging
+        run: ./gradlew testPackaging
+  publish:
+    runs-on: ubuntu-latest
+    needs: test-packaging
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -23,8 +29,6 @@ jobs:
         distribution: 'adopt'
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Test packaging
-      run: ./gradlew testPackaging
     - name: Publish to Github Packages
       run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pgpr.user=${{github.actor}} -Pgpr.token=${{ secrets.GITHUB_TOKEN }}
       
