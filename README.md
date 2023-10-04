@@ -39,3 +39,25 @@ The following artifacts are published:
 - Since 2021.1, the artifact *com.jetbrains.platform-concurrency* is no longer available.
 - Since 2022.2, the artifact *com.jetbrains.platform-api* is no longer available.
 
+
+# Adding a dependency on arbitrary JAR files from an MPS distribution
+
+This repository only publishes some JAR files and does not publish additional JARs retroactively for older versions. If you are using Gradle, you can add a dependency on an arbitrary selection of JARs from within the MPS distribution as follows:
+
+```kotlin
+val mpsRuntime by configurations.creating
+val mpsZip by configurations.creating
+
+dependencies {
+    mpsZip("com.jetbrains:mps:...")
+    mpsRuntime(zipTree({ mpsZip.singleFile }).matching {
+        include("lib/mps-core.jar")
+        include("lib/mps-environment.jar")
+        include("lib/mps-platform.jar")
+        include("lib/mps-openapi.jar")
+        include("lib/mps-logging.jar")
+        include("lib/platform-api.jar")
+        include("lib/util.jar")
+    })
+}
+```
