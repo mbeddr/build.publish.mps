@@ -42,7 +42,7 @@ The following artifacts are published:
 
 # Adding a dependency on arbitrary JAR files from an MPS distribution
 
-This repository only publishes some JAR files and does not publish additional JARs retroactively for older versions. If you are using Gradle, you can add a dependency on an arbitrary selection of JARs from within the MPS distribution as follows:
+This repository only publishes some JAR files and does not publish additional JARs retroactively for older versions. If you are using Gradle, you can add a dependency on an arbitrary selection of JARs from within the MPS distribution as follows (using Gradle Kotlin syntax):
 
 ```kotlin
 val mpsRuntime by configurations.creating
