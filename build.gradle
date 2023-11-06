@@ -178,18 +178,18 @@ task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) 
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
 }
 
-task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-messaging'
-    from zipTree("$mpsUnpackedDir/lib/mps-messaging.jar")
-}
-
-task packageMpsMessagingSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-messaging'
-    classifier 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/messages/**'
-    }
-}
+//task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
+//    baseName 'mps-messaging'
+//    from zipTree("$mpsUnpackedDir/lib/mps-messaging.jar")
+//}
+//
+//task packageMpsMessagingSources(type: Jar, dependsOn: unzipMPS) {
+//    baseName 'mps-messaging'
+//    classifier 'sources'
+//    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
+//        include 'jetbrains/mps/messages/**'
+//    }
+//}
 
 task packageMpsModelchecker(type: Jar, dependsOn: unzipMPS) {
     baseName 'mps-modelchecker'
@@ -368,13 +368,13 @@ publishing {
             artifact packageMpsConsoleIdeCommandsRuntime
             artifact packageMpsConsoleIdeCommandsRuntimeSources
         }
-        mpsMessaging(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-messaging'
-            version mpsBuild
-            artifact packageMpsMessaging
-            artifact packageMpsMessagingSources
-        }
+//        mpsMessaging(MavenPublication) {
+//            groupId 'com.jetbrains'
+//            artifactId 'mps-messaging'
+//            version mpsBuild
+//            artifact packageMpsMessaging
+//            artifact packageMpsMessagingSources
+//        }
         mpsModelchecker(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-modelchecker'
