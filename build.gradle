@@ -245,6 +245,23 @@ task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
     from zipTree("$mpsUnpackedDir/lib/annotations.jar")
 }
 
+def additionalPomInfo = {
+    licenses {
+        // official SPDX identifier
+        // see https://spdx.org/licenses/ for list
+        license {
+            name = "Apache-2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            comments = "A business-friendly OSS license"
+            distribution = "repo"
+        }
+    }
+    organization {
+        name = "JetBrains s.r.o"
+        url = "https://www.jetbrains.com"
+    }
+}
+
 publishing {
     repositories {
         maven {
@@ -259,16 +276,16 @@ publishing {
         repositories {
             if (project.hasProperty("artifacts.itemis.cloud.user") && project.hasProperty("artifacts.itemis.cloud.pw")) {
                 maven {
-                name = "itemisCloud"
-                url = project.version.contains("SNAPSHOT")
-                        ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
-                        : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
-                credentials {
-                    username = project.findProperty("artifacts.itemis.cloud.user")
-                    password = project.findProperty("artifacts.itemis.cloud.pw")
+                    name = "itemisCloud"
+                    url = project.version.contains("SNAPSHOT")
+                            ? uri("https://artifacts.itemis.cloud/repository/maven-mps-snapshots/")
+                            : uri("https://artifacts.itemis.cloud/repository/maven-mps-releases/")
+                    credentials {
+                        username = project.findProperty("artifacts.itemis.cloud.user")
+                        password = project.findProperty("artifacts.itemis.cloud.pw")
+                    }
                 }
-                }
-        }
+            }
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/mbeddr/build.publish.mps")
@@ -287,6 +304,7 @@ publishing {
             artifactId 'mps'
             version mpsBuild
             artifact publishMPS
+            pom additionalPomInfo
         }
         mpsCore(MavenPublication) {
             groupId 'com.jetbrains'
@@ -294,24 +312,28 @@ publishing {
             version mpsBuild
             artifact packageMpsCore
             artifact packageMpsCoreSources
+            pom additionalPomInfo
         }
         mpsEditor(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor'
             version mpsBuild
             artifact packageMpsEditor
+            pom additionalPomInfo
         }
         mpsEditorApi(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor-api'
             version mpsBuild
             artifact packageMpsEditorApi
+            pom additionalPomInfo
         }
         mpsEditorRuntime(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor-runtime'
             version mpsBuild
             artifact packageMpsEditorRuntime
+            pom additionalPomInfo
         }
         mpsOpenApi(MavenPublication) {
             groupId 'com.jetbrains'
@@ -319,6 +341,7 @@ publishing {
             version mpsBuild
             artifact packageMpsOpenApi
             artifact packageMpsOpenApiSources
+            pom additionalPomInfo
         }
         mpsTool(MavenPublication) {
             groupId 'com.jetbrains'
@@ -326,6 +349,7 @@ publishing {
             version mpsBuild
             artifact packageMpsTool
             artifact packageMpsToolSources
+            pom additionalPomInfo
         }
         mpsRun(MavenPublication) {
             groupId 'com.jetbrains'
@@ -333,6 +357,7 @@ publishing {
             version mpsBuild
             artifact packageMpsRun
             //artifact packageMpsRunSources
+            pom additionalPomInfo
         }
         mpsEnvironment(MavenPublication) {
             groupId 'com.jetbrains'
@@ -340,6 +365,7 @@ publishing {
             version mpsBuild
             artifact packageMpsEnvironment
             artifact packageMpsEnvironmentSources
+            pom additionalPomInfo
         }
         mpsPlatform(MavenPublication) {
             groupId 'com.jetbrains'
@@ -347,6 +373,7 @@ publishing {
             version mpsBuild
             artifact packageMpsPlatform
             artifact packageMpsPlatformSources
+            pom additionalPomInfo
         }
         util(MavenPublication) {
             groupId 'com.jetbrains'
@@ -354,6 +381,7 @@ publishing {
             version mpsBuild
             artifact packageUtil
             artifact packageUtilSources
+            pom additionalPomInfo
         }
         /*extensions(MavenPublication) {
             groupId 'com.jetbrains'
@@ -367,6 +395,7 @@ publishing {
             version mpsBuild
             artifact packageMpsConsoleIdeCommandsRuntime
             artifact packageMpsConsoleIdeCommandsRuntimeSources
+            pom additionalPomInfo
         }
 //        mpsMessaging(MavenPublication) {
 //            groupId 'com.jetbrains'
@@ -381,6 +410,7 @@ publishing {
             version mpsBuild
             artifact packageMpsModelchecker
             artifact packageMpsModelcheckerSources
+            pom additionalPomInfo
         }
         mpsHttpsupportRuntime(MavenPublication) {
             groupId 'com.jetbrains'
@@ -388,6 +418,7 @@ publishing {
             version mpsBuild
             artifact packageMpsHttpsupportRuntime
             artifact packageMpsHttpsupportRuntimeSources
+            pom additionalPomInfo
         }
         mpsProjectCheck(MavenPublication) {
             groupId 'com.jetbrains'
@@ -395,6 +426,7 @@ publishing {
             version mpsBuild
             artifact packageMpsProjectCheck
             artifact packageMpsProjectCheckSources
+            pom additionalPomInfo
         }
         /*
         platformApi(MavenPublication) {
@@ -409,12 +441,14 @@ publishing {
             artifactId 'mps-workbench'
             version mpsBuild
             artifact packageMpsWorkbench
+            pom additionalPomInfo
         }
         annotations(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'annotations'
             version mpsBuild
             artifact packageAnnotations
+            pom additionalPomInfo
         }
     }
 }
