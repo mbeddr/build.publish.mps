@@ -1,5 +1,5 @@
 plugins {
-    id 'de.undercouch.download' version '3.1.1'
+    id 'de.undercouch.download' version '5.6.0'
     id 'base'
     id 'maven-publish'
 }
@@ -55,84 +55,84 @@ task publishMPS(type: Zip, dependsOn: unzipMPS) {
  */
 
 task packageMpsCore(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-core'
+    archiveBaseName = 'mps-core'
     from zipTree("$mpsUnpackedDir/lib/mps-core.jar")
 }
 
 task packageMpsWorkbench(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-workbench'
+    archiveBaseName = 'mps-workbench'
     from zipTree("$mpsUnpackedDir/lib/mps-workbench.jar")
 }
 
 task packageMpsCoreSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-core'
-    classifier 'sources'
+    archiveBaseName = 'mps-core'
+    archiveClassifier = 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
 task packageMpsEditor(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-editor'
+    archiveBaseName = 'mps-editor'
     from zipTree("$mpsUnpackedDir/lib/mps-editor.jar")
 }
 
 task packageMpsEditorApi(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-editor-api'
+    archiveBaseName = 'mps-editor-api'
     from zipTree("$mpsUnpackedDir/lib/mps-editor-api.jar")
 }
 
 task packageMpsEditorRuntime(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-editor-runtime'
+    archiveBaseName = 'mps-editor-runtime'
     from zipTree("$mpsUnpackedDir/lib/mps-editor-runtime.jar")
 }
 
 task packageMpsOpenApi(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-openapi'
+    archiveBaseName = 'mps-openapi'
     from zipTree("$mpsUnpackedDir/lib/mps-openapi.jar")
 }
 
 task packageMpsOpenApiSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-openapi'
-    classifier 'sources'
+    archiveBaseName = 'mps-openapi'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'org/jetbrains/mps/**'
     }
 }
 
 task packageMpsTool(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-tool'
+    archiveBaseName = 'mps-tool'
     from zipTree("$mpsUnpackedDir/lib/mpsant/mps-tool.jar")
 }
 
 task packageMpsToolSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-tool'
-    classifier 'sources'
+    archiveBaseName = 'mps-tool'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'jetbrains/mps/tool/builder/**'
     }
 }
 
 task packageMpsRun(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-run'
+    archiveBaseName = 'mps-run'
     from zipTree("$mpsUnpackedDir/lib/mpsant/mps-run.jar")
 }
 
 // MPS-src.zip doesn't contain sources for mps-run.jar
 /*
 task packageMpsRunSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-run'
-    classifier 'sources'
+    archiveBaseName = 'mps-run'
+    archiveClassifier = 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
  */
 
 task packageMpsEnvironment(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-environment'
+    archiveBaseName = 'mps-environment'
     from zipTree("$mpsUnpackedDir/lib/mps-environment.jar")
 }
 
 task packageMpsEnvironmentSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-environment'
-    classifier 'sources'
+    archiveBaseName = 'mps-environment'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'jetbrains/mps/tool/common/**'
         include 'jetbrains/mps/tool/environment/**'
@@ -141,53 +141,53 @@ task packageMpsEnvironmentSources(type: Jar, dependsOn: unzipMPS) {
 }
 
 task packageMpsPlatform(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-platform'
+    archiveBaseName = 'mps-platform'
     from zipTree("$mpsUnpackedDir/lib/mps-platform.jar")
 }
 
 task packageMpsPlatformSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-platform'
-    classifier 'sources'
+    archiveBaseName = 'mps-platform'
+    archiveClassifier = 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
 task packageUtil(type: Jar, dependsOn: unzipMPS) {
-    baseName 'util'
+    archiveBaseName = 'util'
     from zipTree("$mpsUnpackedDir/lib/util.jar")
 }
 
 task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'util'
-    classifier 'sources'
+    archiveBaseName = 'util'
+    archiveClassifier = 'sources'
     from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
 }
 
 /*task packageExtensions(type: Jar, dependsOn: unzipMPS) {
-    baseName 'extensions'
+    archiveBaseName = 'extensions'
     from zipTree("$mpsUnpackedDir/lib/extensions.jar")
 }*/
 
 task packageMpsConsoleIdeCommandsRuntime(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-console-ide-commands-runtime'
+    archiveBaseName = 'mps-console-ide-commands-runtime'
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime.jar")
 }
 
 task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-console-ide-commands-runtime'
-    classifier 'sources'
+    archiveBaseName = 'mps-console-ide-commands-runtime'
+    archiveClassifier = 'sources'
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
 }
 
 if (mpsBuild < '2023') {
     // 2022.3 was the last version to have these jars
     task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
-        baseName 'mps-messaging'
+        archiveBaseName = 'mps-messaging'
         from zipTree("$mpsUnpackedDir/lib/mps-messaging.jar")
     }
 
     task packageMpsMessagingSources(type: Jar, dependsOn: unzipMPS) {
-        baseName 'mps-messaging'
-        classifier 'sources'
+        archiveBaseName = 'mps-messaging'
+        archiveClassifier = 'sources'
         from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
             include 'jetbrains/mps/messages/**'
         }
@@ -195,39 +195,39 @@ if (mpsBuild < '2023') {
 }
 
 task packageMpsModelchecker(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-modelchecker'
+    archiveBaseName = 'mps-modelchecker'
     from zipTree("$mpsUnpackedDir/plugins/mps-modelchecker/lib/modelchecker.jar")
 }
 
 task packageMpsModelcheckerSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-modelchecker'
-    classifier 'sources'
+    archiveBaseName = 'mps-modelchecker'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'jetbrains/mps/ide/modelchecker/**'
     }
 }
 
 task packageMpsHttpsupportRuntime(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-httpsupport-runtime'
+    archiveBaseName = 'mps-httpsupport-runtime'
     from zipTree("$mpsUnpackedDir/plugins/mps-httpsupport/solutions/jetbrains.mps.ide.httpsupport.runtime.jar")
 }
 
 task packageMpsHttpsupportRuntimeSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-httpsupport-runtime'
-    classifier 'sources'
+    archiveBaseName = 'mps-httpsupport-runtime'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'jetbrains/mps/ide/httpsupport/runtime/**'
     }
 }
 
 task packageMpsProjectCheck(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-project-check'
+    archiveBaseName = 'mps-project-check'
     from zipTree("$mpsUnpackedDir/lib/mps-project-check.jar")
 }
 
 task packageMpsProjectCheckSources(type: Jar, dependsOn: unzipMPS) {
-    baseName 'mps-project-check'
-    classifier 'sources'
+    archiveBaseName = 'mps-project-check'
+    archiveClassifier = 'sources'
     from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
         include 'jetbrains/mps/checkers/**'
         include 'jetbrains/mps/core/platform/MPSProjectValidation.java'
@@ -237,14 +237,14 @@ task packageMpsProjectCheckSources(type: Jar, dependsOn: unzipMPS) {
 
 /*
 task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
-    baseName 'platform-api'
+    archiveBaseName = 'platform-api'
     from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
 }
  */
 
 
 task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
-    baseName 'annotations'
+    archiveBaseName = 'annotations'
     from zipTree("$mpsUnpackedDir/lib/annotations.jar")
 }
 
