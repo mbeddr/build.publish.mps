@@ -6,12 +6,24 @@ plugins {
 
 import de.undercouch.gradle.tasks.download.Download
 
-ext.mpsMajor = '2024.1'
-ext.mpsBuild = '2024.1'
+import java.util.regex.Pattern
 
-def mpsDownloadDir = new File(project.buildDir, "MPS-${mpsBuild}")
-def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsBuild}.zip")
-def eapSuffix = (mpsBuild.contains("EAP")) ? " EAP" : ""
+if (!project.hasProperty('mpsVersion')) {
+    throw new GradleException("mpsVersion property must be defined, example: '2024.1.2' or '2024.2-EAP1'")
+}
+
+def mpsMajorRegex = Pattern.compile(/^(\d{4}\.\d)(?!\d)/) // four digits, '.', a digit, not immediately followed by a digit
+def mpsMajorMatcher = mpsMajorRegex.matcher(project.mpsVersion)
+
+if (!mpsMajorMatcher.find()) {
+    throw new GradleException("mpsVersion property must begin with a version number, example: '2024.1.2' or '2024.2-EAP1'")
+}
+
+ext.mpsMajor = mpsMajorMatcher.group(1)
+
+def mpsDownloadDir = layout.buildDirectory.dir("MPS-${mpsVersion}").get().asFile
+def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsVersion}.zip")
+def eapSuffix = (mpsVersion.contains("EAP")) ? " EAP" : ""
 def mpsUnpackedDir = new File(mpsDownloadDir, "MPS ${mpsMajor}${eapSuffix}")
 
 task testPackaging{
@@ -30,7 +42,7 @@ task downloadMPS(type: Download) {
             ant.mkdir(dir: mpsDownloadDir)
         }
     }
-    src "http://download.jetbrains.com/mps/${mpsMajor}/MPS-${mpsBuild}.zip"
+    src "http://download.jetbrains.com/mps/${mpsMajor}/MPS-${mpsVersion}.zip"
     dest mpsDownloadFile
     overwrite false
 }
@@ -178,7 +190,7 @@ task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) 
     from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
 }
 
-if (mpsBuild < '2023') {
+if (mpsVersion < '2023') {
     // 2022.3 was the last version to have these jars
     task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
         archiveBaseName = 'mps-messaging'
@@ -305,14 +317,14 @@ publishing {
         mps(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps'
-            version mpsBuild
+            version mpsVersion
             artifact publishMPS
             pom additionalPomInfo
         }
         mpsCore(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-core'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsCore
             artifact packageMpsCoreSources
             pom additionalPomInfo
@@ -320,28 +332,28 @@ publishing {
         mpsEditor(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsEditor
             pom additionalPomInfo
         }
         mpsEditorApi(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor-api'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsEditorApi
             pom additionalPomInfo
         }
         mpsEditorRuntime(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-editor-runtime'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsEditorRuntime
             pom additionalPomInfo
         }
         mpsOpenApi(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-openapi'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsOpenApi
             artifact packageMpsOpenApiSources
             pom additionalPomInfo
@@ -349,7 +361,7 @@ publishing {
         mpsTool(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-tool'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsTool
             artifact packageMpsToolSources
             pom additionalPomInfo
@@ -357,7 +369,7 @@ publishing {
         mpsRun(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-run'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsRun
             //artifact packageMpsRunSources
             pom additionalPomInfo
@@ -365,7 +377,7 @@ publishing {
         mpsEnvironment(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-environment'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsEnvironment
             artifact packageMpsEnvironmentSources
             pom additionalPomInfo
@@ -373,7 +385,7 @@ publishing {
         mpsPlatform(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-platform'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsPlatform
             artifact packageMpsPlatformSources
             pom additionalPomInfo
@@ -381,7 +393,7 @@ publishing {
         util(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'util'
-            version mpsBuild
+            version mpsVersion
             artifact packageUtil
             artifact packageUtilSources
             pom additionalPomInfo
@@ -389,23 +401,23 @@ publishing {
         /*extensions(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'extensions'
-            version mpsBuild
+            version mpsVersion
             artifact packageExtensions
         }*/
         mpsConsoleIdeCommandsRuntime(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-console-ide-commands-runtime'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsConsoleIdeCommandsRuntime
             artifact packageMpsConsoleIdeCommandsRuntimeSources
             pom additionalPomInfo
         }
-        if (mpsBuild < '2023') {
+        if (mpsVersion < '2023') {
             // 2022.3 was the last version to have these jars
             mpsMessaging(MavenPublication) {
                 groupId 'com.jetbrains'
                 artifactId 'mps-messaging'
-                version mpsBuild
+                version mpsVersion
                 artifact packageMpsMessaging
                 artifact packageMpsMessagingSources
             }
@@ -413,7 +425,7 @@ publishing {
         mpsModelchecker(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-modelchecker'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsModelchecker
             artifact packageMpsModelcheckerSources
             pom additionalPomInfo
@@ -421,7 +433,7 @@ publishing {
         mpsHttpsupportRuntime(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-httpsupport-runtime'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsHttpsupportRuntime
             artifact packageMpsHttpsupportRuntimeSources
             pom additionalPomInfo
@@ -429,7 +441,7 @@ publishing {
         mpsProjectCheck(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-project-check'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsProjectCheck
             artifact packageMpsProjectCheckSources
             pom additionalPomInfo
@@ -438,21 +450,21 @@ publishing {
         platformApi(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'platform-api'
-            version mpsBuild
+            version mpsVersion
             artifact packagePlatformApi
         }
          */
         mpsWorkbench(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'mps-workbench'
-            version mpsBuild
+            version mpsVersion
             artifact packageMpsWorkbench
             pom additionalPomInfo
         }
         annotations(MavenPublication) {
             groupId 'com.jetbrains'
             artifactId 'annotations'
-            version mpsBuild
+            version mpsVersion
             artifact packageAnnotations
             pom additionalPomInfo
         }
