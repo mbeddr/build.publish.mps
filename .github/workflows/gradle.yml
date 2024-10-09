@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: Test packaging with a hardcoded version
 
 on: [push]
 jobs:
@@ -15,4 +15,5 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Test packaging
-        run: ./gradlew testPackaging
+        # Feel free to update the version as needed
+        run: ./gradlew testPackaging -PmpsVersion=2024.1
