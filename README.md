@@ -1,13 +1,12 @@
 # build.publish.mps
 
 [![artifacts.itemis.cloud](https://img.shields.io/badge/dynamic/xml?url=https://artifacts.itemis.cloud/repository/maven-mps/com/jetbrains/mps/maven-metadata.xml&label=artifacts.itemis.cloud&color=success&query=.//versioning/latest)](https://artifacts.itemis.cloud/#browse/browse:maven-mps:com%2Fjetbrains)
-[![Github pages](https://img.shields.io/badge/Github-pages-success)](https://github.com/orgs/mbeddr/packages?repo_name=build.publish.mps)
 
-This repository contains a gradle script for publishing MPS and its jars to a few Maven repositories. You can use these dependencies, for example, in a Gradle or maven build script.
+This repository contains a Gradle script for publishing MPS and some of its jars to the [itemis Nexus](https://artifacts.itemis.cloud) and [GitHub Packages](https://github.com/orgs/mbeddr/packages?repo_name=build.publish.mps). You can use these dependencies, for example, in a Gradle or Maven build script.
+
+Publishing is done on itemis TeamCity by manually triggering the [Update MPS](https://mps.builds.itemis.cloud/buildConfiguration/Mbeddr2_Mbeddr_Gradle_UpdateMps?mode=builds) build configuration, passing the version to publish as a parameter.
 
 Example usage: [model checker of mps-gradle-plugin](https://github.com/mbeddr/mps-gradle-plugin/blob/0da7e4ba4d5ef07504c42d0b77ab097054f02ee8/modelcheck/build.gradle.kts#L41)
-
-The script for older MPS versions can be found in the mps/**X** branches where **X** is a major MPS version.
 
 The following artifacts are published:
 
