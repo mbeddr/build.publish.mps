@@ -21,10 +21,10 @@ if (!mpsMajorMatcher.find()) {
 
 ext.mpsMajor = mpsMajorMatcher.group(1)
 
-def mpsDownloadDir = layout.buildDirectory.dir("MPS-${mpsVersion}").get().asFile
-def mpsDownloadFile = new File(mpsDownloadDir, "MPS-${mpsVersion}.zip")
+def mpsUnzipDir = layout.buildDirectory.dir("MPS-${mpsVersion}").get().asFile
+def mpsDownloadFile = layout.buildDirectory.file("MPS-${mpsVersion}.zip")
 def eapSuffix = (mpsVersion.contains("EAP")) ? " EAP" : ""
-def mpsUnpackedDir = new File(mpsDownloadDir, "MPS ${mpsMajor}${eapSuffix}")
+def mpsUnpackedDir = new File(mpsUnzipDir, "MPS ${mpsMajor}${eapSuffix}")
 
 task testPackaging{
     description "Task triggering all packaging tasks"
@@ -34,26 +34,16 @@ testPackaging.dependsOn {
     tasks.withType(Jar).findAll {jarTask -> jarTask.name.startsWith('package')}
 }
 
-
 // Downloads MPS from jetbrains.com into ${mpsDownloadFile}
 task downloadMPS(type: Download) {
-    doFirst {
-        if (!mpsDownloadDir.exists()) {
-            ant.mkdir(dir: mpsDownloadDir)
-        }
-    }
     src "http://download.jetbrains.com/mps/${mpsMajor}/MPS-${mpsVersion}.zip"
     dest mpsDownloadFile
     overwrite false
 }
 
-task unzipMPS(dependsOn: downloadMPS) {
-    inputs.file mpsDownloadFile
-    outputs.dir mpsDownloadDir
-
-    doLast {
-        ant.unzip src: mpsDownloadFile, dest: mpsDownloadDir
-    }
+task unzipMPS(type: Sync, dependsOn: downloadMPS) {
+    from(zipTree(mpsDownloadFile))
+    into(mpsUnzipDir)
 }
 
 task publishMPS(type: Zip, dependsOn: unzipMPS) {
