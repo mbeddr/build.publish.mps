@@ -50,206 +50,6 @@ task publishMPS(type: Zip, dependsOn: unzipMPS) {
     from mpsUnpackedDir
 }
 
-/*
- * Repackage frequently needed JAR libraries shipping with MPS (in the lib and plugins folders) as individually consumable artifacts.
- * This is useful for the development of command line utilities, Maven plugins, Gradle plugins, or other things
- * that require only smaller parts of the MPS runtime and don't want to end up with a full MPS in their dependencies.
- */
-
-task packageMpsCore(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-core'
-    from zipTree("$mpsUnpackedDir/lib/mps-core.jar")
-}
-
-task packageMpsWorkbench(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-workbench'
-    from zipTree("$mpsUnpackedDir/lib/mps-workbench.jar")
-}
-
-task packageMpsCoreSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-core'
-    archiveClassifier = 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
-}
-
-task packageMpsEditor(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-editor'
-    from zipTree("$mpsUnpackedDir/lib/mps-editor.jar")
-}
-
-task packageMpsEditorApi(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-editor-api'
-    from zipTree("$mpsUnpackedDir/lib/mps-editor-api.jar")
-}
-
-task packageMpsEditorRuntime(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-editor-runtime'
-    from zipTree("$mpsUnpackedDir/lib/mps-editor-runtime.jar")
-}
-
-task packageMpsOpenApi(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-openapi'
-    from zipTree("$mpsUnpackedDir/lib/mps-openapi.jar")
-}
-
-task packageMpsOpenApiSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-openapi'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'org/jetbrains/mps/**'
-    }
-}
-
-task packageMpsTool(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-tool'
-    from zipTree("$mpsUnpackedDir/lib/mpsant/mps-tool.jar")
-}
-
-task packageMpsToolSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-tool'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/tool/builder/**'
-    }
-}
-
-task packageMpsRun(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-run'
-    from zipTree("$mpsUnpackedDir/lib/mpsant/mps-run.jar")
-}
-
-// MPS-src.zip doesn't contain sources for mps-run.jar
-/*
-task packageMpsRunSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-run'
-    archiveClassifier = 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
-}
- */
-
-task packageMpsEnvironment(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-environment'
-    from zipTree("$mpsUnpackedDir/lib/mps-environment.jar")
-}
-
-task packageMpsEnvironmentSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-environment'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/tool/common/**'
-        include 'jetbrains/mps/tool/environment/**'
-        include 'jetbrains/mps/core/tool/environment/**'
-    }
-}
-
-task packageMpsPlatform(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-platform'
-    from zipTree("$mpsUnpackedDir/lib/mps-platform.jar")
-}
-
-task packageMpsPlatformSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-platform'
-    archiveClassifier = 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
-}
-
-task packageUtil(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'util'
-    from zipTree("$mpsUnpackedDir/lib/util.jar")
-}
-
-task packageUtilSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'util'
-    archiveClassifier = 'sources'
-    from zipTree("$mpsUnpackedDir/lib/MPS-src.zip")
-}
-
-/*task packageExtensions(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'extensions'
-    from zipTree("$mpsUnpackedDir/lib/extensions.jar")
-}*/
-
-task packageMpsConsoleIdeCommandsRuntime(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-console-ide-commands-runtime'
-    from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime.jar")
-}
-
-task packageMpsConsoleIdeCommandsRuntimeSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-console-ide-commands-runtime'
-    archiveClassifier = 'sources'
-    from zipTree("$mpsUnpackedDir/plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar")
-}
-
-if (mpsVersion < '2023') {
-    // 2022.3 was the last version to have these jars
-    task packageMpsMessaging(type: Jar, dependsOn: unzipMPS) {
-        archiveBaseName = 'mps-messaging'
-        from zipTree("$mpsUnpackedDir/lib/mps-messaging.jar")
-    }
-
-    task packageMpsMessagingSources(type: Jar, dependsOn: unzipMPS) {
-        archiveBaseName = 'mps-messaging'
-        archiveClassifier = 'sources'
-        from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-            include 'jetbrains/mps/messages/**'
-        }
-    }
-}
-
-task packageMpsModelchecker(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-modelchecker'
-    from zipTree("$mpsUnpackedDir/plugins/mps-modelchecker/lib/modelchecker.jar")
-}
-
-task packageMpsModelcheckerSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-modelchecker'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/ide/modelchecker/**'
-    }
-}
-
-task packageMpsHttpsupportRuntime(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-httpsupport-runtime'
-    from zipTree("$mpsUnpackedDir/plugins/mps-httpsupport/solutions/jetbrains.mps.ide.httpsupport.runtime.jar")
-}
-
-task packageMpsHttpsupportRuntimeSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-httpsupport-runtime'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/ide/httpsupport/runtime/**'
-    }
-}
-
-task packageMpsProjectCheck(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-project-check'
-    from zipTree("$mpsUnpackedDir/lib/mps-project-check.jar")
-}
-
-task packageMpsProjectCheckSources(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'mps-project-check'
-    archiveClassifier = 'sources'
-    from(zipTree("$mpsUnpackedDir/lib/MPS-src.zip")) {
-        include 'jetbrains/mps/checkers/**'
-        include 'jetbrains/mps/core/platform/MPSProjectValidation.java'
-        include 'jetbrains/mps/project/validation/**'
-    }
-}
-
-/*
-task packagePlatformApi(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'platform-api'
-    from zipTree("$mpsUnpackedDir/lib/platform-api.jar")
-}
- */
-
-
-task packageAnnotations(type: Jar, dependsOn: unzipMPS) {
-    archiveBaseName = 'annotations'
-    from zipTree("$mpsUnpackedDir/lib/annotations.jar")
-}
-
 def additionalPomInfo = {
     licenses {
         // official SPDX identifier
@@ -296,152 +96,192 @@ publishing {
             artifact publishMPS
             pom additionalPomInfo
         }
-        mpsCore(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-core'
-            version mpsVersion
-            artifact packageMpsCore
-            artifact packageMpsCoreSources
-            pom additionalPomInfo
+    }
+}
+
+/*
+ * Repackage frequently needed JAR libraries shipping with MPS (in the lib and plugins folders) as individually consumable artifacts.
+ * This is useful for the development of command line utilities, Maven plugins, Gradle plugins, or other things
+ * that require only smaller parts of the MPS runtime and don't want to end up with a full MPS in their dependencies.
+ */
+
+class MpsJar {
+    final String name
+    String customArtifactId
+
+    String relativePath
+
+    String relativeSourcesPath
+    final List<String> sourceIncludes = new ArrayList<>()
+
+    MpsJar(String name) { this.name = name }
+
+    void sourcesInclude(String pattern) {
+        sourceIncludes.add(pattern)
+    }
+}
+
+def mpsJars = objects.domainObjectContainer(MpsJar) { new MpsJar(it) }
+
+static String baseName(String file) {
+    if (file == null) {
+        throw new IllegalArgumentException("file must not be null")
+    }
+    String name = new File(file).name
+    int lastDot = name.lastIndexOf('.')
+    if (lastDot == -1) {
+        return name
+    } else {
+        return name.substring(0, lastDot)
+    }
+}
+
+void createPublicationsFromMpsJars(Iterable<MpsJar> mpsJars, mpsUnpackedDir, additionalPomInfo) {
+    mpsJars.each { mpsJar ->
+        final jarBaseName = baseName(mpsJar.relativePath)
+
+        def packageTask = tasks.register("package${mpsJar.name.capitalize()}", Jar) {
+            dependsOn(unzipMPS)
+
+            archiveBaseName = jarBaseName
+            from zipTree("${mpsUnpackedDir}/${mpsJar.relativePath}")
         }
-        mpsEditor(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-editor'
-            version mpsVersion
-            artifact packageMpsEditor
-            pom additionalPomInfo
-        }
-        mpsEditorApi(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-editor-api'
-            version mpsVersion
-            artifact packageMpsEditorApi
-            pom additionalPomInfo
-        }
-        mpsEditorRuntime(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-editor-runtime'
-            version mpsVersion
-            artifact packageMpsEditorRuntime
-            pom additionalPomInfo
-        }
-        mpsOpenApi(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-openapi'
-            version mpsVersion
-            artifact packageMpsOpenApi
-            artifact packageMpsOpenApiSources
-            pom additionalPomInfo
-        }
-        mpsTool(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-tool'
-            version mpsVersion
-            artifact packageMpsTool
-            artifact packageMpsToolSources
-            pom additionalPomInfo
-        }
-        mpsRun(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-run'
-            version mpsVersion
-            artifact packageMpsRun
-            //artifact packageMpsRunSources
-            pom additionalPomInfo
-        }
-        mpsEnvironment(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-environment'
-            version mpsVersion
-            artifact packageMpsEnvironment
-            artifact packageMpsEnvironmentSources
-            pom additionalPomInfo
-        }
-        mpsPlatform(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-platform'
-            version mpsVersion
-            artifact packageMpsPlatform
-            artifact packageMpsPlatformSources
-            pom additionalPomInfo
-        }
-        util(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'util'
-            version mpsVersion
-            artifact packageUtil
-            artifact packageUtilSources
-            pom additionalPomInfo
-        }
-        /*extensions(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'extensions'
-            version mpsVersion
-            artifact packageExtensions
-        }*/
-        mpsConsoleIdeCommandsRuntime(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-console-ide-commands-runtime'
-            version mpsVersion
-            artifact packageMpsConsoleIdeCommandsRuntime
-            artifact packageMpsConsoleIdeCommandsRuntimeSources
-            pom additionalPomInfo
-        }
-        if (mpsVersion < '2023') {
-            // 2022.3 was the last version to have these jars
-            mpsMessaging(MavenPublication) {
-                groupId 'com.jetbrains'
-                artifactId 'mps-messaging'
-                version mpsVersion
-                artifact packageMpsMessaging
-                artifact packageMpsMessagingSources
+
+        TaskProvider<Jar> packageSourcesTask
+
+        if (mpsJar.relativeSourcesPath == null) {
+            if (!mpsJar.sourceIncludes.isEmpty()) {
+                throw new IllegalArgumentException("MPS jar ${mpsJar.name} specified source include patterns but no source path")
+            }
+            packageSourcesTask = null
+        } else {
+            packageSourcesTask = tasks.register("package${mpsJar.name.capitalize()}Sources", Jar) {
+                dependsOn(unzipMPS)
+                archiveBaseName = jarBaseName
+                archiveClassifier = 'sources'
+                from(zipTree("$mpsUnpackedDir/${mpsJar.relativeSourcesPath ?: 'lib/MPS-src.zip'}")) { CopySpec spec ->
+                    spec.include(mpsJar.sourceIncludes)
+                }
             }
         }
-        mpsModelchecker(MavenPublication) {
+
+        publishing.publications.create(mpsJar.name, MavenPublication) {
             groupId 'com.jetbrains'
-            artifactId 'mps-modelchecker'
+            artifactId mpsJar.customArtifactId ?: jarBaseName
             version mpsVersion
-            artifact packageMpsModelchecker
-            artifact packageMpsModelcheckerSources
-            pom additionalPomInfo
-        }
-        mpsHttpsupportRuntime(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-httpsupport-runtime'
-            version mpsVersion
-            artifact packageMpsHttpsupportRuntime
-            artifact packageMpsHttpsupportRuntimeSources
-            pom additionalPomInfo
-        }
-        mpsProjectCheck(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-project-check'
-            version mpsVersion
-            artifact packageMpsProjectCheck
-            artifact packageMpsProjectCheckSources
-            pom additionalPomInfo
-        }
-        /*
-        platformApi(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'platform-api'
-            version mpsVersion
-            artifact packagePlatformApi
-        }
-         */
-        mpsWorkbench(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'mps-workbench'
-            version mpsVersion
-            artifact packageMpsWorkbench
-            pom additionalPomInfo
-        }
-        annotations(MavenPublication) {
-            groupId 'com.jetbrains'
-            artifactId 'annotations'
-            version mpsVersion
-            artifact packageAnnotations
+            artifact packageTask
+            if (packageSourcesTask != null) {
+                artifact packageSourcesTask
+            }
             pom additionalPomInfo
         }
     }
 }
+
+mpsJars.configure {
+    annotations {
+        relativePath = 'lib/annotations.jar'
+    }
+
+    mpsConsoleIdeCommandsRuntime {
+        relativePath = 'plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime.jar'
+        relativeSourcesPath = 'plugins/mps-console/lang/jetbrains.mps.console.ideCommands.runtime-src.jar'
+
+        customArtifactId = 'mps-console-ide-commands-runtime'
+    }
+
+    mpsCore {
+        relativePath = 'lib/mps-core.jar'
+        relativeSourcesPath = 'lib/MPS-src.zip'
+    }
+
+    mpsEditor {
+        relativePath = 'lib/mps-editor.jar'
+    }
+
+    mpsEditorApi {
+        relativePath = 'lib/mps-editor-api.jar'
+    }
+
+    mpsEditorRuntime {
+        relativePath = 'lib/mps-editor-runtime.jar'
+    }
+
+    mpsEnvironment {
+        relativePath = 'lib/mps-environment.jar'
+
+        relativeSourcesPath = 'lib/MPS-src.zip'
+        sourcesInclude 'jetbrains/mps/tool/common/**'
+        sourcesInclude 'jetbrains/mps/tool/environment/**'
+        sourcesInclude 'jetbrains/mps/core/tool/environment/**'
+    }
+
+    mpsHttpsupportRuntime {
+        relativePath = 'plugins/mps-httpsupport/solutions/jetbrains.mps.ide.httpsupport.runtime.jar'
+
+        relativeSourcesPath = 'lib/MPS-src.zip'
+        sourcesInclude 'jetbrains/mps/ide/httpsupport/runtime/**'
+    }
+
+    if (mpsVersion < '2023') {
+        // 2022.3 was the last version to have these jars
+        mpsMessaging {
+            relativePath = 'lib/mps-messaging.jar'
+
+            relativeSourcesPath = 'lib/MPS-src.zip'
+            sourcesInclude 'jetbrains/mps/messages/**'
+        }
+    }
+
+    mpsModelchecker {
+        relativePath = 'plugins/mps-modelchecker/lib/modelchecker.jar'
+
+        relativeSourcesPath = 'lib/MPS-src.zip'
+        sourcesInclude 'jetbrains/mps/ide/modelchecker/**'
+    }
+
+    mpsOpenApi {
+        relativePath = 'lib/mps-openapi.jar'
+        relativeSourcesPath = 'lib/MPS-src.zip'
+
+        sourcesInclude 'org/jetbrains/mps/**'
+    }
+
+    mpsPlatform {
+        relativePath = 'lib/mps-platform.jar'
+        relativeSourcesPath = 'lib/MPS-src.zip'
+    }
+
+    mpsProjectCheck {
+        relativePath = 'lib/mps-project-check.jar'
+
+        relativeSourcesPath = 'lib/MPS-src.zip'
+        sourcesInclude 'jetbrains/mps/checkers/**'
+        sourcesInclude 'jetbrains/mps/core/platform/MPSProjectValidation.java'
+        sourcesInclude 'jetbrains/mps/project/validation/**'
+    }
+
+    mpsRun {
+        relativePath = 'lib/mpsant/mps-run.jar'
+
+        // MPS-src.zip does not contain sources for mps-run.jar
+        //relativeSourcesPath = 'lib/MPS-src.zip'
+    }
+
+    mpsTool {
+        relativePath = 'lib/mpsant/mps-tool.jar'
+        relativeSourcesPath = 'lib/MPS-src.zip'
+        sourcesInclude 'jetbrains/mps/tool/builder/**'
+    }
+
+    mpsWorkbench {
+        relativePath = 'lib/mps-workbench.jar'
+    }
+
+    util {
+        relativePath = 'lib/util.jar'
+        relativeSourcesPath = 'lib/MPS-src.zip'
+    }
+}
+
+createPublicationsFromMpsJars(mpsJars, mpsUnpackedDir, additionalPomInfo)
