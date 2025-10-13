@@ -16,4 +16,4 @@ jobs:
           distribution: 'adopt'
       - name: Test packaging
         # Feel free to update the version as needed
-        run: ./gradlew testPackaging -PmpsVersion=2024.1
+        run: ./gradlew testPackaging -PmpsVersion=2025.1.1

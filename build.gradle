@@ -23,8 +23,6 @@ ext.mpsMajor = mpsMajorMatcher.group(1)
 
 def mpsUnzipDir = layout.buildDirectory.dir("MPS-${mpsVersion}").get().asFile
 def mpsDownloadFile = layout.buildDirectory.file("MPS-${mpsVersion}.zip")
-def eapSuffix = (mpsVersion.contains("EAP")) ? " EAP" : ""
-def mpsUnpackedDir = new File(mpsUnzipDir, "MPS ${mpsMajor}${eapSuffix}")
 
 task testPackaging{
     description "Task triggering all packaging tasks"
@@ -44,10 +42,16 @@ task downloadMPS(type: Download) {
 task unzipMPS(type: Sync, dependsOn: downloadMPS) {
     from(zipTree(mpsDownloadFile))
     into(mpsUnzipDir)
+    includeEmptyDirs = false
+
+    eachFile { fcd ->
+        // Strip zip root directory
+        fcd.relativePath = new RelativePath(true, fcd.relativePath.segments.drop(1))
+    }
 }
 
 task publishMPS(type: Zip, dependsOn: unzipMPS) {
-    from mpsUnpackedDir
+    from mpsUnzipDir
 }
 
 def additionalPomInfo = {
@@ -136,7 +140,7 @@ static String baseName(String file) {
     }
 }
 
-void createPublicationsFromMpsJars(Iterable<MpsJar> mpsJars, mpsUnpackedDir, additionalPomInfo) {
+void createPublicationsFromMpsJars(Iterable<MpsJar> mpsJars, mpsUnzipDir, additionalPomInfo) {
     mpsJars.each { mpsJar ->
         final jarBaseName = baseName(mpsJar.relativePath)
 
@@ -144,7 +148,7 @@ void createPublicationsFromMpsJars(Iterable<MpsJar> mpsJars, mpsUnpackedDir, add
             dependsOn(unzipMPS)
 
             archiveBaseName = jarBaseName
-            from zipTree("${mpsUnpackedDir}/${mpsJar.relativePath}")
+            from zipTree("${mpsUnzipDir}/${mpsJar.relativePath}")
         }
 
         TaskProvider<Jar> packageSourcesTask
@@ -159,7 +163,7 @@ void createPublicationsFromMpsJars(Iterable<MpsJar> mpsJars, mpsUnpackedDir, add
                 dependsOn(unzipMPS)
                 archiveBaseName = jarBaseName
                 archiveClassifier = 'sources'
-                from(zipTree("$mpsUnpackedDir/${mpsJar.relativeSourcesPath ?: 'lib/MPS-src.zip'}")) { CopySpec spec ->
+                from(zipTree("$mpsUnzipDir/${mpsJar.relativeSourcesPath ?: 'lib/MPS-src.zip'}")) { CopySpec spec ->
                     spec.include(mpsJar.sourceIncludes)
                 }
             }
@@ -284,4 +288,4 @@ mpsJars.configure {
     }
 }
 
-createPublicationsFromMpsJars(mpsJars, mpsUnpackedDir, additionalPomInfo)
+createPublicationsFromMpsJars(mpsJars, mpsUnzipDir, additionalPomInfo)
