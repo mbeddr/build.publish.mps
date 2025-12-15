@@ -1,0 +1,10 @@
+pluginManagement {
+    repositories {
+        maven {
+            url "https://artifacts.itemis.cloud/repository/gradle-plugins/"
+        }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'build.publish.mps'
