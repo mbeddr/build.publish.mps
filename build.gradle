@@ -2,9 +2,13 @@ plugins {
     id 'de.undercouch.download' version '5.6.0'
     id 'base'
     id 'maven-publish'
+    id 'spdx-license-mapping' version '1.0.1'
 }
 
 import de.undercouch.gradle.tasks.download.Download
+import com.itemis.gradle.spdx.SpdxLicenseMapper
+import com.itemis.gradle.spdx.JsonLicenseProvider
+import org.gradle.api.publish.maven.tasks.GenerateMavenPom
 
 import java.util.regex.Pattern
 
@@ -55,15 +59,14 @@ task publishMPS(type: Zip, dependsOn: unzipMPS) {
 }
 
 def additionalPomInfo = {
-    licenses {
-        // official SPDX identifier
-        // see https://spdx.org/licenses/ for list
-        license {
-            name = "Apache-2.0"
-            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            comments = "A business-friendly OSS license"
-            distribution = "repo"
+    withXml {
+        def licensesNode = asNode().appendNode('licenses')
+        def thirdPartyJsonFile = new File(mpsUnzipDir, "license/third-party-libraries.json")
+
+        if (!thirdPartyJsonFile.exists()) {
+            throw new GradleException("third-party-libraries.json not found at ${thirdPartyJsonFile.absolutePath} - cannot determine licenses")
         }
+        SpdxLicenseMapper.addLicensesToPom(licensesNode, new JsonLicenseProvider(thirdPartyJsonFile))
     }
     organization {
         name = "JetBrains s.r.o"
@@ -101,6 +104,10 @@ publishing {
             pom additionalPomInfo
         }
     }
+}
+
+tasks.withType(GenerateMavenPom) {
+    dependsOn unzipMPS
 }
 
 /*
@@ -289,3 +296,5 @@ mpsJars.configure {
 }
 
 createPublicationsFromMpsJars(mpsJars, mpsUnzipDir, additionalPomInfo)
+
+
