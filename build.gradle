@@ -110,6 +110,53 @@ tasks.withType(GenerateMavenPom) {
     dependsOn unzipMPS
 }
 
+// Publish a marker POM declaring the JetBrains Runtime (JBR) that this MPS version is built with.
+//
+// The runtime build is read from build.properties (mps.runtimeBuild) and transformed into the version format published
+// as com.jetbrains.jdk:jbr_jcef: a '-' is inserted before the build number, e.g. '17.0.11b1207.24' becomes
+// '17.0.11-b1207.24'.
+//
+// If the publication cannot be created (no build.properties, no mps.runtimeBuild, or invalid format), an exception is
+// thrown.
+private void createPublicationForMpsJbr(mpsUnzipDir) {
+    def jbrJcefVersion = {
+        def buildPropertiesFile = new File(mpsUnzipDir, 'build.properties')
+        if (!buildPropertiesFile.exists()) {
+            throw new GradleException("build.properties not found at ${buildPropertiesFile.absolutePath} - cannot determine JBR runtime version")
+        }
+
+        def properties = new Properties()
+        buildPropertiesFile.withInputStream { properties.load(it) }
+
+        def runtimeBuild = properties.getProperty('mps.runtimeBuild')
+        if (!runtimeBuild) {
+            throw new GradleException("mps.runtimeBuild property not found in ${buildPropertiesFile.absolutePath}")
+        }
+
+        def matcher = (runtimeBuild =~ /^(\d+(?:\.\d+)*)b(.+)$/)
+        if (!matcher.matches()) {
+            throw new GradleException("Unexpected mps.runtimeBuild format '${runtimeBuild}', expected e.g. '17.0.11b1207.24'")
+        }
+
+        return "${matcher.group(1)}-b${matcher.group(2)}"
+    }
+
+    publishing.publications.create('mpsJbr', MavenPublication) {
+        groupId 'com.jetbrains.mps'
+        artifactId 'mps-jbr'
+        version mpsVersion
+        pom {
+            packaging = 'pom'
+            withXml {
+                def dependencyNode = asNode().appendNode('dependencies').appendNode('dependency')
+                dependencyNode.appendNode('groupId', 'com.jetbrains.jdk')
+                dependencyNode.appendNode('artifactId', 'jbr_jcef')
+                dependencyNode.appendNode('version', jbrJcefVersion())
+            }
+        }
+    }
+}
+
 /*
  * Repackage frequently needed JAR libraries shipping with MPS (in the lib and plugins folders) as individually consumable artifacts.
  * This is useful for the development of command line utilities, Maven plugins, Gradle plugins, or other things
@@ -297,4 +344,8 @@ mpsJars.configure {
 
 createPublicationsFromMpsJars(mpsJars, mpsUnzipDir, additionalPomInfo)
 
-
+// The mps.runtimeBuild property is only present since MPS 2023.3.1 (the 2023.3 release itself does not
+// have it), so the marker POM is only published for that version and later.
+if (mpsVersion > '2023.3') {
+    createPublicationForMpsJbr(mpsUnzipDir)
+}
