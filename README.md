@@ -10,11 +10,11 @@ Example usage: [model checker of mps-gradle-plugin](https://github.com/mbeddr/mp
 
 The following artifacts are published:
 
-**As a zip file**:
+**MPS generic zip**:
 
-- com.jetbrains.mps: if a jar file is not published, you can still extract it from this full zip file.
+- com.jetbrains.mps: if a jar file (below) is not published, you can still extract it from this full zip file.
 
-**As a jar file**:
+**Individual JAR files**:
 
 - *com.jetbrains.mps-core*
 - *com.jetbrains.mps-editor*
@@ -33,6 +33,12 @@ The following artifacts are published:
 - *com.jetbrains.mps-project-check*
 - *com.jetbrains.mps-workbench*
 - *com.jetbrains.annotations*
+
+**JetBrains Runtime (JBR) marker POM**:
+
+- *com.jetbrains.mps:mps-jbr*: a dependency-only POM whose single dependency is the version of `com.jetbrains.jdk:jbr_jcef` (the JetBrains Runtime) that this MPS version is built with. The version is derived from the `mps.runtimeBuild` property in the distribution's `build.properties`.
+
+This marker can be used with the [jbr-toolchain] plugin to keep the JBR version in sync with the used MPS version.
 
 **Notes**:
 - Since 2021.1, the artifact *com.jetbrains.platform-concurrency* is no longer available.
@@ -60,3 +66,5 @@ dependencies {
     })
 }
 ```
+
+[jbr-toolchain]: https://github.com/specificlanguages/mps-gradle-plugin/tree/faaa2cc058b4b8b1d770c9ec3d039b1c9698a738/subprojects/jbr-toolchain
