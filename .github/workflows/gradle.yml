@@ -12,8 +12,8 @@ jobs:
       - name: Set up Java
         uses: actions/setup-java@v6
         with:
-          java-version: '21'
-          distribution: 'adopt'
+          java-version: '27'
+          distribution: 'temurin'
       - name: Test packaging
         # Feel free to update the version as needed
         run: ./gradlew testPackaging -PmpsVersion=2025.1.1
